@@ -8,21 +8,24 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <nav class="navbar">
+<nav class="navbar">
       <div class="nav-container">
         <div class="left-section">
+          <h1 class="logo"><img src="assets/logo-horizontal.png"></h1>
         </div>
         <div class="right-section">
         <button class="logout" (click)="receitas()">Minhas receitas</button>
         </div>
         <div class="right-section">
-        <button class="logout" (click)="despesas()">Minhas despesas</button>
+       <!-- <button class="logout" (click)="despesas()">Minhas despesas</button>-->
+       <button class="logout despesas-btn" (click)="despesas()">Minhas despesas</button>
         </div>
         <div class="right-section">
           <button class="logout" (click)="logout()">Sair</button>
         </div>
         </div>
-    </nav>
+</nav>
+
   `,
   styleUrls: ['./home.component.css']
   

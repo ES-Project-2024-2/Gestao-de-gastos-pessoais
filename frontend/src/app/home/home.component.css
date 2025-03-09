@@ -65,3 +65,23 @@ body {
   transform: scale(1.02);
   box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
+
+.left-section {
+  display: flex;
+  align-items: center; /* Alinha a logo verticalmente */
+}
+
+.logo img {
+  height: 50px; /* Ajuste conforme necessário */
+  width: auto; /* Mantém a proporção da imagem */
+  margin-top: 10px;
+}
+
+.despesas-btn {
+  background-color: #ff4444;
+  color: white;
+}
+
+.despesas-btn:hover {
+  background-color: #cc0000 
+}

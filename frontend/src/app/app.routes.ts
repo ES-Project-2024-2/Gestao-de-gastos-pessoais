@@ -12,7 +12,7 @@ import { ExpenseComponent } from "./home/expense/expense.component";
 const routeConfig: Routes = [
     { 
         path: '', component: RootComponent, 
-        title: 'root' 
+        title: 'Início' 
     },
     { 
         path: 'register', component: RegisterComponent, 
@@ -39,12 +39,12 @@ const routeConfig: Routes = [
     { 
         path: 'home/income', component: IncomeComponent, 
         canActivate: [authGuard],
-        title: 'incomes' 
+        title: 'Receitas' 
     },
     { 
         path: 'home/expense', component: ExpenseComponent, 
         canActivate: [authGuard],
-        title: 'expenses' 
+        title: 'Despesas' 
     },
 ]; 
 

@@ -1,35 +1,19 @@
-/* Fonte Global */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #F5F5F5;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-       
-}
 .chart-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
-}
-
-svg {
-  border-radius: 50%;
-  border: 2px solid #ddd;
-}
-.chart-container {
-  display: flex;
-  align-items: center;
+  width: auto;
+  height: auto;
+  /*margin-top: 20px;*/
 }
 
 .legend {
-  list-style: none;
   padding: 0;
   margin-left: 20px;
+  margin-top: 10px;
+  
 }
 
 .legend li {
@@ -44,66 +28,67 @@ svg {
   display: inline-block;
   margin-right: 8px;
   border-radius: 50%;
+  font-family: poppins;
+  font-weight: 600;
 }
+
 .date-filter {
-  margin-bottom: 15px;
+  margin-top: 10px;
   display: flex;
   gap: 10px;
+  align-items: center;
+  justify-content: center;
 }
 
 .date-filter label {
-  font-weight: bold;
+  margin-left: 10px;
 }
 
-/* Container principal */
 .expense-container {
   display: flex;
   height: 100vh;
-  padding: 20px;
+  /*padding: 20px;*/
+  
 }
 
-/* Lateral esquerda com os botões */
 .left-section {
-  width: 300px; /* Aumente a largura de 220px para 300px */
-  background-color: #FFFFFF;
-  padding: 30px 20px;
+  background-color: #fff;
+  box-shadow: 0 14px 28px rgba(4, 95, 36, 0.25),
+      0 10px 10px rgba(9, 91, 12, 0.22);
+  width: 25%;
+  height: 100vh;
+  height: auto;
+  align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
 }
 
 .left-section button {
-  background-color: #6CBF88;
-  color: white;
-  border: none;
-  padding: 15px 25px;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  margin: 12px 0;
-  width: 90%; /* Isso garante que os botões ocupem toda a largura disponível */
-  text-align: left;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+align-items: center;
+margin-top: 30px;
+width: 65%;
+height: auto;
+font-size: clamp(14px, 2vw, 17px); 
 }
-/* 🔹 Ajuste do layout geral */
+
+
 .main-content {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: flex-start; /* mantém o topo alinhado */
-  gap: 20px; /* Espaço entre os elementos */
+  align-items: flex-start; 
+  gap: 2%;
+  width: 130%;
+  height: auto;
+  margin-top: 50px;
 }
 
-/* 🔹 Ajuste específico para a lista de despesas */
+
 .expense-list {
-  width: 100%; /* Ocupa toda a largura */
-  max-width: 800px; /* Definir um limite para não ficar gigante */
-  margin-top: 30px; /* Move para baixo */
+  width: 100%; 
+  max-width: 800px; 
+  margin-top: 30px; 
   padding: 15px;
   background: #ffffff;
   border-radius: 10px;
@@ -113,46 +98,36 @@ svg {
   border: 1px solid #ddd;
 }
 
-/* 🔹 Estiliza o título */
+
 .expense-list h2 {
   font-size: 1.6rem;
-  color: #333;
+  color: #5EC57E;
   text-align: center;
   margin-bottom: 15px;
   font-weight: bold;
 }
 
-/* 🔹 Deixa os itens mais organizados */
 .expense-list ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* 🔹 Ajuste dos itens */
 .expense-list li {
   background: #f9f9f9;
   margin-bottom: 10px;
   padding: 12px;
   border-radius: 8px;
-  border-left: 6px solid #34A853;
+  border-left: 6px solid #5EC57E;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
 }
 
-/* 🔥 Ajuste do hover */
+
 .expense-list li:hover {
   transform: scale(1.02);
   background: #f1f1f1;
 }
-
-
-.left-section button:hover {
-  background-color: #34A853;
-  transform: scale(1.05);
-}
-
-
 
 
 .month-filter input {
@@ -175,7 +150,8 @@ svg {
 }
 .chart-container {
   flex: 1;
-  max-width: 50%;
+  max-width: 100%;
+  height: auto;
   padding: 15px;
   background: #ffffff;
   border-radius: 10px;
@@ -187,11 +163,9 @@ svg {
   display: block;
   width: 90%;
   height: auto;
-  border-radius: 0; /
+  border-radius: 0; 
 }
 
-
-/* Área principal que vai conter o modal e formulário */
 .main-content {
   flex-grow: 1;
   display: flex;
@@ -221,12 +195,13 @@ svg {
 
 .modal-content {
   background: #FFFFFF;
-  padding: 40px;
+  padding: 30px;
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   width: 90%;
   max-width: 600px;
   text-align: center;
+  align-items: center;
 }
 
 .close {
@@ -239,14 +214,11 @@ svg {
   transition: color 0.3s;
 }
 
-.close:hover {
-  color: #333;
-}
 
 h2 {
   font-size: 24px;
   font-weight: 600;
-  color: #333;
+  color: #5EC57E;
   margin-bottom: 20px;
 }
 
@@ -258,7 +230,7 @@ form {
 
 label {
   font-weight: 600;
-  color: #444;
+  color: #5EC57E;
   font-size: 16px;
   text-align: left;
 }
@@ -278,65 +250,51 @@ input:focus {
 }
 
 button {
-  background-color: #6CBF88;
+  background-color: #35B276;
   color: white;
   border: none;
-  padding: 15px 25px;
-  border-radius: 10px;
-  font-size: 16px;
+  border-radius: 15px;
+  padding: 18px;
+  font-size: 14x;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-weight: 600;
 }
 
 button:hover {
-  background-color: #34A853;
+  background-color: #5EC57E;
+  transform: scale(1.02);
 }
 
-button:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
-}
-
-/* Layout Responsivo */
-@media (max-width: 768px) {
-  .expense-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .left-section {
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 15px;
-  }
-
-  .main-content {
-    width: 100%;
-    padding: 10px;
-  }
-}
-
-/* Estilo para o botão Home no canto superior direito */
-.home-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: #6CBF88;
+.criar-edit-trash, .home-button{
+  background-color: #35B276;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
+  border-radius: 15px;
+  padding: 18px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.criar-edit-trash:hover, .home-button:hover {
+  background-color: #5EC57E;
+  transform: scale(1.02);
+}
+
+.home-button {
+  all: unset;
+  background-color: #35b276;
+  color: white;
+  padding: 5px 10px;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-weight: 600;
+  font-weight: 400;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.home-button:hover {
-  background-color: #34A853;
-  transform: scale(1.05);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 select {
@@ -346,7 +304,7 @@ select {
   font-size: 16px;
   transition: border-color 0.3s;
   background-color: #f9f9f9;
-  width: 100%; /* Garante que o select ocupe toda a largura disponível */
+  width: 100%; 
 }
 
 select:focus {
@@ -375,4 +333,46 @@ select:focus {
 
 .category-list li:hover {
   background-color: #f0f0f0;
+}
+
+.edit-remove{
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font: inherit !important;
+  color: inherit !important;
+  cursor: pointer !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transition: none !important;
+  all: unset;
+}
+
+.criar-edit-trash.cancel-mode {
+  background-color: #ff4444 !important;
+  color: white !important;
+}
+
+.criar-edit-trash.cancel-mode:hover {
+  background-color: #cc0000 !important;
+}
+
+/* Layout Responsivo */
+@media (max-width: 768px) {
+  .expense-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .left-section {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 15px;
+  }
+
+  .main-content {
+    width: 100%;
+    padding: 10px;
+  }
 }

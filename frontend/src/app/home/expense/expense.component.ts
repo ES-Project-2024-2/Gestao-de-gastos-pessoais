@@ -11,16 +11,24 @@ import { Expense } from '../../entity/expense';
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   template: `
   <section class="expense-container">
-    <button class ="home-button"(click)="home()">home</button>
+    <button class ="home-button"(click)="home()">Home</button>
     <div class="left-section">
-      <!-- Botões para abrir os modais -->
-      <button (click)="openModal('create')">Criar Despesa</button>
-      <button (click)="toggleEditMode()"> {{ isEditing ? 'Cancelar Edição' : 'Editar Despesa' }} </button>
-      <button (click)="toggleRemoveMode()"> {{ isRemoving ? 'Cancelar Remoção' : 'Remover Despesa' }} </button>
-    </div>
+  <button class="criar-edit-trash" (click)="openModal('create')">Criar Despesa</button>
+  <button 
+    class="criar-edit-trash" 
+    [class.cancel-mode]="isEditing" 
+    (click)="toggleEditMode()">
+    {{ isEditing ? 'Cancelar Edição' : 'Editar Despesa' }}
+  </button>
+  <button 
+    class="criar-edit-trash" 
+    [class.cancel-mode]="isRemoving" 
+    (click)="toggleRemoveMode()">
+    {{ isRemoving ? 'Cancelar Remoção' : 'Remover Despesa' }}
+  </button>
+</div>
 
     <div class="main-content">
-
     <div class="chart-container">
         <h2>Gráfico de Despesas</h2>
         <div class="date-filter">
@@ -62,7 +70,6 @@ import { Expense } from '../../entity/expense';
 </div>
 
 
-
     <!-- Lista de Despesas -->
         <div class="expense-list">
           <h2>Lista de Despesas</h2>
@@ -77,8 +84,8 @@ import { Expense } from '../../entity/expense';
               </div>
 
               <!-- Mostrar botão de remoção apenas se o modo de remoção ou edição estiver ativo -->
-              <button *ngIf="isEditing" (click)="openEditModal(expense)">✏️</button>
-              <button *ngIf="isRemoving" (click)="onSubmitRemove(expense.uuid!)">❌</button>
+              <button class="edit-remove" *ngIf="isEditing" (click)="openEditModal(expense)"><img src="assets/edit-bnt.png"></button>
+              <button class="edit-remove" *ngIf="isRemoving" (click)="onSubmitRemove(expense.uuid!)"><img src="assets/trash-bnt.png"></button>
             </li>
           </ul>
         </div>
@@ -106,7 +113,7 @@ import { Expense } from '../../entity/expense';
             <label for="valor">Valor</label>
             <input type="text" formControlName="valor"/>
 
-            <label for="destinoPagamento">Destino</label>
+            <label for="destinoPagamento">Destino do pagamento</label>
             <input type="text" formControlName="destinoPagamento"/>
 
             <label>Observação</label>
