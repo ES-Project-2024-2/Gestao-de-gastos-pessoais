@@ -50,6 +50,6 @@ public class AuthController {
         // Gera o token JWT com username e role
         String token = jwtUtil.generateToken(userEntity.getUuid(), userEntity.getUsername(),userEntity.getEmail(), role);
 
-        return ResponseEntity.ok(Map.of("token", token));
+        return ResponseEntity.ok(Map.of("token", token))
     }
 }
