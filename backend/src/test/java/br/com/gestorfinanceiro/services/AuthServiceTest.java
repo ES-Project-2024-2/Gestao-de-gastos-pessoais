@@ -253,4 +253,23 @@ public class AuthServiceTest {
         assertEquals(qtdUsersInicial, qtdUsersFinal); // se for igual garante que não foi registrado um novo usuario.
     }
     
+                //------------TESTES DO MÉTODO LOGIN----------//
+    @Test
+    public void deveFazerLoginERecuperarUsuario() {
+        UserEntity user = new UserEntity();
+        user.setUsername("Jorge"); 
+        user.setEmail("jorge@gmail.com");
+        user.setPassword("123456");
+        user.setRole(Roles.USER);
+
+        authService.register(user); 
+
+        
+        UserEntity userLogado = authService.login("jorge@gmail.com", "123456"); //faz login de um user cadastrado 
+
+        assertEquals(user.getUsername(), userLogado.getUsername()); //compara se o username do usuario salvo é igual ao username do usuario logado
+        assertEquals(user.getRole(), userLogado.getRole()); //compara se o role do usuario salvo é igual ao role do usuario logado
+        assertEquals(user.getEmail(), userLogado.getEmail()); //compara se o usuario salvo é igual ao usuario logado
+        //Se todos passarem, prova que dá para recuperar os dados
+    }
 }
