@@ -186,4 +186,71 @@ public class AuthServiceTest {
         UserOperationException thrown = assertThrows( UserOperationException.class, () -> authService.login("jorge@gmail.com", null)); 
         assertNotNull(thrown);
     }
+
+    //-------------------------------TESTES DE INTEGRAÇÃO-------------------------------//
+                //------------TESTES DO MÉTODO REGISTER----------//
+
+    @Test
+    public void deveRegistrarERecuperarUsuario() {
+        UserEntity user = new UserEntity();
+        user.setUsername("Jorge"); 
+        user.setEmail("jorge@gmail.com");
+        user.setPassword("123456");
+        user.setRole(Roles.USER);
+
+        int qtdUsersInicial = (int) userRepository.count(); // Conta a quantidade de usuários antes de registrar um novo
+        authService.register(user); 
+
+        UserEntity userSalvo = userRepository.findByEmail(user.getEmail()).get(); //Recupera o usuario salvo no banco
+
+        int qtdUsersFinal = (int) userRepository.count(); // Conta a quantidade de usuários depois de tentar registrar um novo com email duplicado
+        assertEquals(qtdUsersInicial + 1, qtdUsersFinal); // se for igual garante que foi registrado um novo usuario.
+
+        assertEquals(user.getUsername(), userSalvo.getUsername()); //compara se o username do usuario salvo é igual ao username do usuario cadastrado
+        assertEquals(user.getRole(), userSalvo.getRole()); //compara se o role do usuario salvo é igual ao role do usuario cadastrado
+        assertEquals(user.getEmail(), userSalvo.getEmail()); //compara se o usuario salvo é igual ao usuario cadastrado
+    }
+
+    @Test
+    public void ErroAoRegistrarUsuarioComEmailJaCadastradoVerifcandoSeForamSalvos() {
+        UserEntity user = new UserEntity();
+        user.setUsername("Jorge"); 
+        user.setEmail("jorge@gmail.com");
+        user.setPassword("123456");
+        user.setRole(Roles.USER);
+
+        authService.register(user); 
+
+        UserEntity user2 = new UserEntity();
+        user2.setUsername("Paulo"); 
+        user2.setEmail("paulo@gmail.com");
+        user2.setPassword("123456");
+        user2.setRole(Roles.USER);
+
+        authService.register(user2);
+
+        UserEntity user3 = new UserEntity();
+        user3.setUsername("Paulo2"); 
+        user3.setEmail("paulo@gmail.com");
+        user3.setPassword("123456");
+        user3.setRole(Roles.USER);
+
+        UserEntity user4 = new UserEntity();
+        user4.setUsername("Jorge2"); 
+        user4.setEmail("jorge@gmail.com");
+        user4.setPassword("123456");
+        user4.setRole(Roles.USER);
+
+        int qtdUsersInicial = (int) userRepository.count(); // Conta a quantidade de usuários antes de registrar um novo
+
+        //Testa registrar dois usuario com email que já está cadastrado para garantir que não registrar um novo usuario
+        EmailAlreadyExistsException thrown = assertThrows( EmailAlreadyExistsException.class, () -> authService.register(user3)); 
+        assertNotNull(thrown);
+        EmailAlreadyExistsException thrown2 = assertThrows( EmailAlreadyExistsException.class, () -> authService.register(user4)); 
+        assertNotNull(thrown2); 
+
+        int qtdUsersFinal = (int) userRepository.count(); // Conta a quantidade de usuários depois de tentar registrar um novo com email duplicado
+        assertEquals(qtdUsersInicial, qtdUsersFinal); // se for igual garante que não foi registrado um novo usuario.
+    }
+    
 }
