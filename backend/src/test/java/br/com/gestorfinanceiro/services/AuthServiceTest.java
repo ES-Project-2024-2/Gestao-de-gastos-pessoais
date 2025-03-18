@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import br.com.gestorfinanceiro.exceptions.auth.UserOperationException;
+import br.com.gestorfinanceiro.exceptions.auth.login.EmailNotFoundException;
+import br.com.gestorfinanceiro.exceptions.auth.login.InvalidPasswordException;
 import br.com.gestorfinanceiro.exceptions.auth.register.EmailAlreadyExistsException;
 import br.com.gestorfinanceiro.exceptions.auth.register.UsernameAlreadyExistsException;
 import br.com.gestorfinanceiro.models.UserEntity;
@@ -41,8 +43,9 @@ public class AuthServiceTest {
     }
     
 
-    //----------------------------TESTES UNITÁRIOS-------------------------//
+    //-------------------------------TESTES UNITÁRIOS-------------------------------//
     
+                //------------TESTES DO MÉTODO REGISTER----------//
     @Test
     public void deveRegistrarUsuario() {
         UserEntity user = new UserEntity();
@@ -125,6 +128,62 @@ public class AuthServiceTest {
         user.setRole(Roles.USER);
 
         UserOperationException thrown = assertThrows( UserOperationException.class, () -> authService.register(user)); 
+        assertNotNull(thrown);
+    }
+
+                //------------TESTES DO MÉTODO LOGIN----------//
+    
+     @Test
+    public void deveFazerLogin() {
+        UserEntity user = new UserEntity();
+        user.setUsername("Jorge"); 
+        user.setEmail("jorge@gmail.com");
+        user.setPassword("123456");
+        user.setRole(Roles.USER);
+
+        authService.register(user);
+
+        UserEntity userLogado = authService.login("jorge@gmail.com", "123456"); //Tenta fazer o login com as credenciais de um usuario cadastrado
+
+        assertEquals(user, userLogado); //Verifica se o usuario retornado foi o mesmo que o cadastrado
+        
+    }        
+
+    @Test
+    public void ErroAoFazerLoginComEmailInexistente() {
+
+        //tenta login com um email que não existe
+        EmailNotFoundException thrown = assertThrows( EmailNotFoundException.class, () -> authService.login("aaaaaa@gmail.com", "123456")); 
+        assertNotNull(thrown);
+    }
+
+    @Test
+    public void ErroAoFazerLoginComSenhaIncorreta() {
+        UserEntity user = new UserEntity();
+        user.setUsername("Jorge"); 
+        user.setEmail("jorge@gmail.com");
+        user.setPassword("123456");
+        user.setRole(Roles.USER);
+
+        authService.register(user);
+
+        //tenta fazer login com a senha errada
+        InvalidPasswordException thrown = assertThrows( InvalidPasswordException.class, () -> authService.login("jorge@gmail.com", "333")); 
+        assertNotNull(thrown);
+    }
+
+    @Test
+    public void ErroDeLogin() {
+        UserEntity user = new UserEntity();
+        user.setUsername("Jorge"); 
+        user.setEmail("jorge@gmail.com");
+        user.setPassword("123456");
+        user.setRole(Roles.USER);
+
+        authService.register(user);
+
+        //Força um erro no login passando a senha como nula, ai o método de criptografia não vai conseguir comparar as senhas
+        UserOperationException thrown = assertThrows( UserOperationException.class, () -> authService.login("jorge@gmail.com", null)); 
         assertNotNull(thrown);
     }
 }
