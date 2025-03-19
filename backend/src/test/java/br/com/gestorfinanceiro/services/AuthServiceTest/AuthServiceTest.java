@@ -23,7 +23,7 @@ import br.com.gestorfinanceiro.services.AuthService;
 
 @SpringBootTest
 @ActiveProfiles("test") 
-public class AuthServiceTestUnit {
+class AuthServiceTest  {
 
     @Autowired
     private AuthService authService;
@@ -32,19 +32,20 @@ public class AuthServiceTestUnit {
     private UserRepository userRepository;
 
     @Test //teste para ver sw o AuthService foi carregado
-    public void deveCarregarAuthService() {
+    void deveCarregarAuthService() {
         assertNotNull(authService, "O AuthService não deveria ser nulo!");
     }
 
     @BeforeEach
-    public void setUp() {
+    @SuppressWarnings("unused")
+    void setUp() {
         userRepository.deleteAll(); // Limpa o banco antes de cada teste para evitar inconcistencias
     }
     
     //-------------------TESTES DO MÉTODO REGISTER-------------------//
 
     @Test
-    public void deveRegistrarUsuario() {
+    void deveRegistrarUsuario() {
         UserEntity user = new UserEntity();
         user.setUsername("Jorge");
         user.setEmail("jorge@gmail.com");
@@ -58,7 +59,7 @@ public class AuthServiceTestUnit {
     }
 
     @Test
-    public void verificarSenhaCriptografada() {
+    void verificarSenhaCriptografada() {
         UserEntity user = setarUsuario("jorge"); //Adiciona um usuario no banco
 
         String senhaDada = user.getPassword(); //Pega a senha informada pelo usuário
@@ -72,7 +73,7 @@ public class AuthServiceTestUnit {
     }
 
     @Test
-    public void ErroAoRegistrarUsuarioComEmailJaCadastrado() {
+    void ErroAoRegistrarUsuarioComEmailJaCadastrado() {
         adicionarUsuario("jorge");
 
         UserEntity user2 = setarUsuario("jorge");
@@ -84,7 +85,7 @@ public class AuthServiceTestUnit {
     }
 
     @Test
-    public void ErroAoRegistrarUsuarioComUsernameJaCadastrado() {
+    void ErroAoRegistrarUsuarioComUsernameJaCadastrado() {
         adicionarUsuario("jorge");
 
         UserEntity user2 = setarUsuario("jorge");
@@ -94,7 +95,7 @@ public class AuthServiceTestUnit {
     }
 
     @Test
-    public void ErroAoRegistrarUsuario() {
+    void ErroAoRegistrarUsuario() {
         UserEntity user = setarUsuario("jorge");
         user.setUsername(null);
 
@@ -105,7 +106,7 @@ public class AuthServiceTestUnit {
     //---------------TESTES DO MÉTODO LOGIN----------------//
     
      @Test
-    public void deveFazerLogin() {
+    void deveFazerLogin() {
         UserEntity user = adicionarUsuario("jorge");
 
         UserEntity userLogado = authService.login("jorge@gmail.com", "123456"); //Tenta fazer o login com as credenciais de um usuario cadastrado
@@ -115,14 +116,14 @@ public class AuthServiceTestUnit {
     }        
 
     @Test
-    public void ErroAoFazerLoginComEmailInexistente() {
+    void ErroAoFazerLoginComEmailInexistente() {
         //tenta login com um email que não existe
         EmailNotFoundException thrown = assertThrows( EmailNotFoundException.class, () -> authService.login("aaaaaa@gmail.com", "123456")); 
         assertNotNull(thrown);
     }
 
     @Test
-    public void ErroAoFazerLoginComSenhaIncorreta() {
+    void ErroAoFazerLoginComSenhaIncorreta() {
         adicionarUsuario("jorge");
 
         //tenta fazer login com a senha errada
@@ -131,7 +132,7 @@ public class AuthServiceTestUnit {
     }
 
     @Test
-    public void ErroDeLogin() {
+    void ErroDeLogin() {
         adicionarUsuario("jorge");
 
         //Força um erro no login passando a senha como nula, ai o método de criptografia não vai conseguir comparar as senhas

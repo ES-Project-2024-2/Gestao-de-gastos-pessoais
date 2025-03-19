@@ -18,7 +18,7 @@ import br.com.gestorfinanceiro.services.AuthService;
 
 @SpringBootTest
 @ActiveProfiles("test") 
-public class AuthServiceTestInt {
+class AuthServiceIT {
 
     @Autowired
     private AuthService authService;
@@ -27,19 +27,20 @@ public class AuthServiceTestInt {
     private UserRepository userRepository;
 
     @Test //teste para ver sw o AuthService foi carregado
-    public void deveCarregarAuthService() {
+    void deveCarregarAuthService() {
         assertNotNull(authService, "O AuthService não deveria ser nulo!");
     }
 
     @BeforeEach
-    public void setUp() {
+    @SuppressWarnings("unused")
+    void setUp() {
         userRepository.deleteAll(); // Limpa o banco antes de cada teste para evitar inconcistencias
     }
                 
     //------------------TESTES DO MÉTODO REGISTER----------------------//
 
     @Test
-    public void deveRegistrarERecuperarUsuario() {
+    void deveRegistrarERecuperarUsuario() {
         UserEntity user = setarUsuario("jorge");
 
         int qtdUsersInicial = (int) userRepository.count(); // Conta a quantidade de usuários antes de registrar um novo
@@ -56,7 +57,7 @@ public class AuthServiceTestInt {
     }
 
     @Test
-    public void ErroAoRegistrarUsuarioComEmailJaCadastradoVerifcandoSeForamSalvos() {
+    void ErroAoRegistrarUsuarioComEmailJaCadastradoVerifcandoSeForamSalvos() {
         adicionarUsuario("jorge");
 
         adicionarUsuario("paulo");
@@ -84,7 +85,7 @@ public class AuthServiceTestInt {
     
     //------------------TESTES DO MÉTODO LOGIN----------------------//
     @Test
-    public void deveFazerLoginERecuperarUsuario() {
+    void deveFazerLoginERecuperarUsuario() {
         UserEntity user = adicionarUsuario("jorge");
 
         UserEntity userLogado = authService.login("jorge@gmail.com", "123456"); //faz login de um user cadastrado 
