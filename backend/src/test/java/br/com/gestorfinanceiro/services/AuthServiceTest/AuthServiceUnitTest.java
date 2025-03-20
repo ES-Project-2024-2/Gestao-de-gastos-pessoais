@@ -1,5 +1,6 @@
 package br.com.gestorfinanceiro.services.AuthServiceTest;
 
+import br.com.gestorfinanceiro.TestDataUtil;
 import br.com.gestorfinanceiro.exceptions.auth.UserOperationException;
 import br.com.gestorfinanceiro.exceptions.auth.login.EmailNotFoundException;
 import br.com.gestorfinanceiro.exceptions.auth.login.InvalidPasswordException;
@@ -57,7 +58,7 @@ class AuthServiceUnitTest  {
 
     @Test
     void verificarSenhaCriptografada() {
-        UserEntity user = setarUsuario("jorge"); //Adiciona um usuario no banco
+        UserEntity user = TestDataUtil.setarUsuario("jorge"); //Adiciona um usuario no banco
 
         String senhaDada = user.getPassword(); //Pega a senha informada pelo usuário
 
@@ -73,7 +74,7 @@ class AuthServiceUnitTest  {
     void ErroAoRegistrarUsuarioComEmailJaCadastrado() {
         adicionarUsuario("jorge");
 
-        UserEntity user2 = setarUsuario("jorge");
+        UserEntity user2 = TestDataUtil.setarUsuario("jorge");
 
         //Verifica se o assertThrows lançou a exceção esperada se sim a variável thrown recebera essa exceção
         EmailAlreadyExistsException thrown = assertThrows( EmailAlreadyExistsException.class, () -> authService.register(user2));
@@ -85,7 +86,7 @@ class AuthServiceUnitTest  {
     void ErroAoRegistrarUsuarioComUsernameJaCadastrado() {
         adicionarUsuario("jorge");
 
-        UserEntity user2 = setarUsuario("jorge");
+        UserEntity user2 = TestDataUtil.setarUsuario("jorge");
         user2.setEmail("aaaaa@gmail.com");
         UsernameAlreadyExistsException thrown = assertThrows( UsernameAlreadyExistsException.class, () -> authService.register(user2)); 
         assertNotNull(thrown);
@@ -93,7 +94,7 @@ class AuthServiceUnitTest  {
 
     @Test
     void ErroAoRegistrarUsuario() {
-        UserEntity user = setarUsuario("jorge");
+        UserEntity user = TestDataUtil.setarUsuario("jorge");
         user.setUsername(null);
 
         UserOperationException thrown = assertThrows( UserOperationException.class, () -> authService.register(user)); 
@@ -140,21 +141,10 @@ class AuthServiceUnitTest  {
     //-------------------------------MÉTODOS AUXILIARES-------------------------------//
 
     public UserEntity adicionarUsuario(String nome) {
-        UserEntity user = setarUsuario(nome);
+        UserEntity user = TestDataUtil.setarUsuario(nome);
 
         authService.register(user); 
 
         return user;
     }
-
-    public UserEntity setarUsuario(String nome) {
-        UserEntity user = new UserEntity();
-        user.setUsername(nome); 
-        user.setEmail(nome+"@gmail.com");	
-        user.setPassword("123456");
-        user.setRole(Roles.USER);
-
-        return user;
-    }
-                
 }
