@@ -1,5 +1,7 @@
 package br.com.gestorfinanceiro.controllers.AuthControllerTest;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -8,9 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import br.com.gestorfinanceiro.controller.AuthController;
+import br.com.gestorfinanceiro.dto.LoginDTO;
 import br.com.gestorfinanceiro.dto.UserDTO;
 import br.com.gestorfinanceiro.exceptions.auth.register.EmailAlreadyExistsException;
 import br.com.gestorfinanceiro.models.UserEntity;
@@ -64,6 +68,36 @@ public class AuthControllerUnitTest {
         //Se o service for convocado corretamente, ele lançara uma execção de email já existente pois o email já foi cadastrado na requesição anterior
         EmailAlreadyExistsException thrown = assertThrows( EmailAlreadyExistsException.class, () -> authController.register(userDTO2)); 
         assertNotNull(thrown); //Se a exceção for lançada, thrown não será nulo
+    }
+
+    //-------------------TESTES DO MÉTODO LOGIN-------------------//
+
+    @Test
+    void conferirParametrosLoginDTO() {
+        adicionarUsuario("jorge");
+
+        LoginDTO loginDTO = new LoginDTO("jorge@gmail.com", "123456");
+
+        ResponseEntity<Map<String, String>> response = authController.login(loginDTO);
+        //Se o status da operação for 200 OK, o login foi bem sucedido portanto os parametros foram passados corretamente
+        assertEquals(response.getStatusCode().toString(), "200 OK");
+    }           
+    
+    
+    @Test
+    void conferirGeracaoDoToken(){  
+        adicionarUsuario("jorge");
+
+        LoginDTO loginDTO = new LoginDTO("jorge@gmail.com", "123456");
+
+        ResponseEntity<Map<String, String>> response = authController.login(loginDTO);
+
+        Map<String, String> responseBody = response.getBody();
+        assertNotNull(responseBody); //Verifica se teve resposta
+        
+        String token = responseBody.get("token");
+        assertNotNull(token); //Se o token for gerado, ele não será nulo, portanto ocorreu tudo corretamente
+        
     }
 
     //-------------------------------MÉTODOS AUXILIARES-------------------------------//
