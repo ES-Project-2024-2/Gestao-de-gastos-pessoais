@@ -23,7 +23,7 @@ import br.com.gestorfinanceiro.services.AuthService;
 
 @SpringBootTest
 @ActiveProfiles("test") 
-class AuthServiceTest  {
+class AuthServiceUnitTest  {
 
     @Autowired
     private AuthService authService;
