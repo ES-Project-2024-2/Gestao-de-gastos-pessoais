@@ -43,9 +43,9 @@ class AuthServiceIntegrationTest {
         UserEntity user = TestDataUtil.criarUsuarioEntityUtil("jorge");
 
         int qtdUsersInicial = (int) userRepository.count(); // Conta a quantidade de usuários antes de registrar um novo
-        authService.register(user); 
+        authService.register(user);
 
-        UserEntity userSalvo = userRepository.findByEmail(user.getEmail()).get(); //Recupera o usuario salvo no banco
+        UserEntity userSalvo = authService.encontrarPorEmail(user.getEmail()); //Recupera o usuario salvo no banco
 
         int qtdUsersFinal = (int) userRepository.count(); // Conta a quantidade de usuários após tentar registrar um novo com e-mail duplicado
         assertEquals(qtdUsersInicial + 1, qtdUsersFinal); // se for igual garante que foi registrado um novo usuario.
