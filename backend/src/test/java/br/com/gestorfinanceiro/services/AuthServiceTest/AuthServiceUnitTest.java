@@ -145,6 +145,26 @@ class AuthServiceUnitTest {
         assertNotNull(thrown);
     }
 
+    //---------------TESTES DO METODO FIND USER BY EMAIL----------------//
+    @Test
+    void deveEncontrarUsuarioPeloEmail() {
+        UserEntity user = adicionarUsuario(USER_NAME);
+
+        UserEntity userEncontrado = authService.findUserByEmail(USER_EMAIL); //Tenta encontrar um usuario pelo e-mail
+
+        assertEquals(user, userEncontrado); //Verifica se o usuario retornado foi o mesmo que o cadastrado
+    }
+
+    @Test
+    void ErroAoEncontrarUsuarioPeloEmail() {
+        adicionarUsuario(USER_NAME);
+
+        //Tenta encontrar um usuario com um e-mail que não existe
+        EmailNotFoundException thrown = assertThrows(EmailNotFoundException.class, () -> authService.findUserByEmail("email_invalido@gmail.com"));
+        assertNotNull(thrown);
+    }
+
+
     //-------------------------------MÉTODOS AUXILIARES-------------------------------//
 
     public UserEntity adicionarUsuario(String nome) {

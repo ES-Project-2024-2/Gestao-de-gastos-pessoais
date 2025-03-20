@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
-@ActiveProfiles("test") 
+@ActiveProfiles("test")
 class AuthServiceIntegrationTest {
 
     @Autowired
@@ -25,7 +25,8 @@ class AuthServiceIntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Test //teste para ver sw o AuthService foi carregado
+    @Test
+        //teste para ver sw o AuthService foi carregado
     void deveCarregarAuthService() {
         assertNotNull(authService, "O AuthService não deveria ser nulo!");
     }
@@ -62,10 +63,10 @@ class AuthServiceIntegrationTest {
         adicionarUsuario("paulo");
 
         UserEntity user3 = TestDataUtil.criarUsuarioEntityUtil("paulo");
-        user3.setUsername("paulo2"); 
+        user3.setUsername("paulo2");
 
         UserEntity user4 = new UserEntity();
-        user4.setUsername("Jorge2"); 
+        user4.setUsername("Jorge2");
         user4.setEmail("jorge@gmail.com");
         user4.setPassword("123456");
         user4.setRole(Roles.USER);
@@ -73,9 +74,9 @@ class AuthServiceIntegrationTest {
         int qtdUsersInicial = (int) userRepository.count(); // Conta a quantidade de usuários antes de registrar um novo
 
         //Testa registrar dois usuario com e-mail já cadastrado para garantir que não registrar um novo usuario
-        EmailAlreadyExistsException thrown = assertThrows( EmailAlreadyExistsException.class, () -> authService.register(user3)); 
+        EmailAlreadyExistsException thrown = assertThrows(EmailAlreadyExistsException.class, () -> authService.register(user3));
         assertNotNull(thrown);
-        EmailAlreadyExistsException thrown2 = assertThrows( EmailAlreadyExistsException.class, () -> authService.register(user4)); 
+        EmailAlreadyExistsException thrown2 = assertThrows(EmailAlreadyExistsException.class, () -> authService.register(user4));
         assertNotNull(thrown2);
 
         int qtdUsersFinal = (int) userRepository.count(); // Conta a quantidade de usuários após tentar registrar um novo com e-mail duplicado
@@ -95,12 +96,24 @@ class AuthServiceIntegrationTest {
         //Se todos passarem, prova que dá para recuperar os dados
     }
 
+    //---------------TESTES DO METODO FIND USER BY EMAIL----------------//
+    @Test
+    void deveRecuperarUsuarioPorEmail() {
+        UserEntity user = adicionarUsuario("jorge");
+
+        UserEntity userSalvo = authService.findUserByEmail("jorge@gmail.com"); //Recupera o usuario salvo no banco
+
+        assertEquals(user.getUsername(), userSalvo.getUsername()); //compara se o username do usuario salvo é igual ao username do usuario salvo
+        assertEquals(user.getRole(), userSalvo.getRole()); //compara se o role do usuario salvo é igual ao role do usuario logado
+        assertEquals(user.getEmail(), userSalvo.getEmail()); //compara se o usuario salvo é igual ao usuario logado
+    }
+
     //-------------------------------MÉTODOS AUXILIARES-------------------------------//
 
     public UserEntity adicionarUsuario(String nome) {
         UserEntity user = TestDataUtil.criarUsuarioEntityUtil(nome);
 
-        authService.register(user); 
+        authService.register(user);
 
         return user;
     }
