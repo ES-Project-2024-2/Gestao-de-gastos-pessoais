@@ -19,7 +19,7 @@ import br.com.gestorfinanceiro.repositories.UserRepository;
 
 @SpringBootTest
 @ActiveProfiles("test") 
-public class AuthControllerTest {
+public class AuthControllerUnitTest {
     
     @Autowired
     private UserRepository userRepository;
