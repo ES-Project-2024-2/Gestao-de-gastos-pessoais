@@ -69,8 +69,7 @@ class AuthServiceUnitTest {
 
         authService.register(user);
 
-        UserEntity userSalvo = userRepository.findByEmail(user.getEmail()) //Recupera o usuario salvo no banco
-                .orElseThrow(() -> new AssertionError("Usuário não encontrado após registro"));
+        UserEntity userSalvo = authService.encontrarPorEmail(user.getEmail());//Recupera o usuario salvo no banco
 
         String senhaSalva = userSalvo.getPassword(); //Pega a senha possivelmente modificada desse usuario salva no banco
 

@@ -46,13 +46,13 @@ class AuthControllerUnitTest {
         UserDTO userDTO = adicionarUsuario("jorge");
 
         //Recupera o usuario salvo no banco com o e-mail dado do DTO, significando que são os mesmos
-        UserEntity userSalvo = userRepository.findByEmail(userDTO.getEmail()).get();
+        UserEntity userSalvo = authController.findByEmail(userDTO.getEmail()).getBody();
+        assertNotNull(userSalvo); //Se o usuario salvo não for nulo, ele foi salvo corretamente
 
-        assertEquals(userDTO.getUsername(), userSalvo.getUsername());  
+        assertEquals(userDTO.getUsername(), userSalvo.getUsername());
         assertEquals(userDTO.getRole(), userSalvo.getRole().toString());   //Converte o enum em string para comparar
-    }           
-    
-    
+    }
+
     @Test
     void conferirServiceChamadoCorretamente(){        
         UserDTO userDTO = setarUsuario("jorge");
