@@ -58,7 +58,7 @@ class AuthServiceUnitTest  {
 
     @Test
     void verificarSenhaCriptografada() {
-        UserEntity user = TestDataUtil.setarUsuario("jorge"); //Adiciona um usuario no banco
+        UserEntity user = TestDataUtil.criarUsuarioEntityUtil("jorge"); //Adiciona um usuario no banco
 
         String senhaDada = user.getPassword(); //Pega a senha informada pelo usuário
 
@@ -74,7 +74,7 @@ class AuthServiceUnitTest  {
     void ErroAoRegistrarUsuarioComEmailJaCadastrado() {
         adicionarUsuario("jorge");
 
-        UserEntity user2 = TestDataUtil.setarUsuario("jorge");
+        UserEntity user2 = TestDataUtil.criarUsuarioEntityUtil("jorge");
 
         //Verifica se o assertThrows lançou a exceção esperada se sim a variável thrown recebera essa exceção
         EmailAlreadyExistsException thrown = assertThrows( EmailAlreadyExistsException.class, () -> authService.register(user2));
@@ -86,7 +86,7 @@ class AuthServiceUnitTest  {
     void ErroAoRegistrarUsuarioComUsernameJaCadastrado() {
         adicionarUsuario("jorge");
 
-        UserEntity user2 = TestDataUtil.setarUsuario("jorge");
+        UserEntity user2 = TestDataUtil.criarUsuarioEntityUtil("jorge");
         user2.setEmail("aaaaa@gmail.com");
         UsernameAlreadyExistsException thrown = assertThrows( UsernameAlreadyExistsException.class, () -> authService.register(user2)); 
         assertNotNull(thrown);
@@ -94,7 +94,7 @@ class AuthServiceUnitTest  {
 
     @Test
     void ErroAoRegistrarUsuario() {
-        UserEntity user = TestDataUtil.setarUsuario("jorge");
+        UserEntity user = TestDataUtil.criarUsuarioEntityUtil("jorge");
         user.setUsername(null);
 
         UserOperationException thrown = assertThrows( UserOperationException.class, () -> authService.register(user)); 
@@ -141,7 +141,7 @@ class AuthServiceUnitTest  {
     //-------------------------------MÉTODOS AUXILIARES-------------------------------//
 
     public UserEntity adicionarUsuario(String nome) {
-        UserEntity user = TestDataUtil.setarUsuario(nome);
+        UserEntity user = TestDataUtil.criarUsuarioEntityUtil(nome);
 
         authService.register(user); 
 
