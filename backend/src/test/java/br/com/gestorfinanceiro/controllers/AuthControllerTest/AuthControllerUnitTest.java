@@ -1,11 +1,11 @@
 package br.com.gestorfinanceiro.controllers.AuthControllerTest;
 
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import br.com.gestorfinanceiro.controller.AuthController;
+import br.com.gestorfinanceiro.dto.LoginDTO;
+import br.com.gestorfinanceiro.dto.UserDTO;
+import br.com.gestorfinanceiro.exceptions.auth.register.EmailAlreadyExistsException;
+import br.com.gestorfinanceiro.models.UserEntity;
+import br.com.gestorfinanceiro.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
-import br.com.gestorfinanceiro.controller.AuthController;
-import br.com.gestorfinanceiro.dto.LoginDTO;
-import br.com.gestorfinanceiro.dto.UserDTO;
-import br.com.gestorfinanceiro.exceptions.auth.register.EmailAlreadyExistsException;
-import br.com.gestorfinanceiro.models.UserEntity;
-import br.com.gestorfinanceiro.repositories.UserRepository;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -39,16 +36,16 @@ class AuthControllerUnitTest {
     @BeforeEach
     @SuppressWarnings("unused")
     void setUp() {
-        userRepository.deleteAll(); // Limpa o banco antes de cada teste para evitar inconcistencias
+        userRepository.deleteAll(); // Limpa o banco antes de cada teste para evitar inconsistências
     }
 
-    //-------------------TESTES DO MÉTODO REGISTER-------------------//
+    //-------------------TESTES DO METODO REGISTER-------------------//
 
     @Test
-    void conferirConversaoDTOUserEntity() {
+    void conferirConversaoDtoUserEntity() {
         UserDTO userDTO = adicionarUsuario("jorge");
 
-        //Recupera o usuario salvo no banco com o email dado do DTO, significando que são os mesmos
+        //Recupera o usuario salvo no banco com o e-mail dado do DTO, significando que são os mesmos
         UserEntity userSalvo = userRepository.findByEmail(userDTO.getEmail()).get();
 
         assertEquals(userDTO.getUsername(), userSalvo.getUsername());  
@@ -65,12 +62,12 @@ class AuthControllerUnitTest {
         UserDTO userDTO2 = setarUsuario("jorge2");
         userDTO2.setEmail("jorge@gmail.com");
 
-        //Se o service for convocado corretamente, ele lançara uma execção de email já existente pois o email já foi cadastrado na requesição anterior
+        //Se o service for convocado corretamente, ele lançara uma exceção de e-mail já existente, pois o e-mail já foi cadastrado na requisição anterior
         EmailAlreadyExistsException thrown = assertThrows( EmailAlreadyExistsException.class, () -> authController.register(userDTO2)); 
         assertNotNull(thrown); //Se a exceção for lançada, thrown não será nulo
     }
 
-    //-------------------TESTES DO MÉTODO LOGIN-------------------//
+    //-------------------TESTES DO METODO LOGIN-------------------//
 
     @Test
     void conferirParametrosLoginDTO() {
@@ -79,13 +76,13 @@ class AuthControllerUnitTest {
         LoginDTO loginDTO = new LoginDTO("jorge@gmail.com", "123456");
 
         ResponseEntity<Map<String, String>> response = authController.login(loginDTO);
-        //Se o status da operação for 200 OK, o login foi bem sucedido portanto os parametros foram passados corretamente
+        //Se o status da operação for 200 OK, o login foi bem-sucedido, portanto os parametros foram passados corretamente
         assertEquals("200 OK", response.getStatusCode().toString());
     }           
     
     
     @Test
-    void conferirGeracaoDoToken(){  
+    void conferirGeracaoDoToken() {
         adicionarUsuario("jorge");
 
         LoginDTO loginDTO = new LoginDTO("jorge@gmail.com", "123456");
