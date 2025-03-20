@@ -52,7 +52,7 @@ public class AuthController {
 
     @GetMapping("/{email}")
     public ResponseEntity<UserEntity> findByEmail(@PathVariable String email) {
-        UserEntity userEntity = authService.encontrarPorEmail(email);
+        UserEntity userEntity = authService.findUserByEmail(email);
         return ResponseEntity.ok(userEntity);
     }
 }
