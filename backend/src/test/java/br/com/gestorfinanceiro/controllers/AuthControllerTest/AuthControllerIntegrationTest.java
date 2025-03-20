@@ -19,7 +19,7 @@ import br.com.gestorfinanceiro.repositories.UserRepository;
 
 @SpringBootTest
 @ActiveProfiles("test") 
-public class AuthControllerIntegrationTest {
+class AuthControllerIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -47,7 +47,7 @@ public class AuthControllerIntegrationTest {
         ResponseEntity<UserEntity> response = authController.register(userDTO); 
 
         //resposta tem que ser 201 created
-        assertEquals(response.getStatusCode().toString(), "201 CREATED");
+        assertEquals("201 CREATED", response.getStatusCode().toString());
 
         UserEntity userSalvo = userRepository.findByEmail(userDTO.getEmail()).get();
 

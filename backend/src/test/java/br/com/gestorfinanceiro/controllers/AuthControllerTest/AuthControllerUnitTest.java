@@ -23,7 +23,7 @@ import br.com.gestorfinanceiro.repositories.UserRepository;
 
 @SpringBootTest
 @ActiveProfiles("test") 
-public class AuthControllerUnitTest {
+class AuthControllerUnitTest {
     
     @Autowired
     private UserRepository userRepository;
@@ -80,7 +80,7 @@ public class AuthControllerUnitTest {
 
         ResponseEntity<Map<String, String>> response = authController.login(loginDTO);
         //Se o status da operação for 200 OK, o login foi bem sucedido portanto os parametros foram passados corretamente
-        assertEquals(response.getStatusCode().toString(), "200 OK");
+        assertEquals("200 OK", response.getStatusCode().toString());
     }           
     
     
