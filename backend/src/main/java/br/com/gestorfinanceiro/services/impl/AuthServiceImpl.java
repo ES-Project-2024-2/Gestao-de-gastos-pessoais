@@ -1,8 +1,5 @@
 package br.com.gestorfinanceiro.services.impl;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import br.com.gestorfinanceiro.exceptions.auth.UserOperationException;
 import br.com.gestorfinanceiro.exceptions.auth.login.EmailNotFoundException;
 import br.com.gestorfinanceiro.exceptions.auth.login.InvalidPasswordException;
@@ -12,6 +9,8 @@ import br.com.gestorfinanceiro.models.UserEntity;
 import br.com.gestorfinanceiro.repositories.UserRepository;
 import br.com.gestorfinanceiro.services.AuthService;
 import jakarta.validation.Valid;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -63,5 +62,10 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception e) {
             throw new UserOperationException("Erro ao logar usuario. Por favor, tente novamente", e);
         }
+    }
+
+    @Override
+    public UserEntity encontrarPorEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException(email));
     }
 }
