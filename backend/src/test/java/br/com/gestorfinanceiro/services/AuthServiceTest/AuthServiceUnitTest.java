@@ -1,15 +1,5 @@
 package br.com.gestorfinanceiro.services.AuthServiceTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-
 import br.com.gestorfinanceiro.exceptions.auth.UserOperationException;
 import br.com.gestorfinanceiro.exceptions.auth.login.EmailNotFoundException;
 import br.com.gestorfinanceiro.exceptions.auth.login.InvalidPasswordException;
@@ -19,6 +9,13 @@ import br.com.gestorfinanceiro.models.UserEntity;
 import br.com.gestorfinanceiro.models.enums.Roles;
 import br.com.gestorfinanceiro.repositories.UserRepository;
 import br.com.gestorfinanceiro.services.AuthService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -39,10 +36,10 @@ class AuthServiceUnitTest  {
     @BeforeEach
     @SuppressWarnings("unused")
     void setUp() {
-        userRepository.deleteAll(); // Limpa o banco antes de cada teste para evitar inconcistencias
+        userRepository.deleteAll(); // Limpa o banco antes de cada teste para evitar inconsistências
     }
-    
-    //-------------------TESTES DO MÉTODO REGISTER-------------------//
+
+    //-------------------TESTES DO METODO REGISTER-------------------//
 
     @Test
     void deveRegistrarUsuario() {
@@ -54,7 +51,7 @@ class AuthServiceUnitTest  {
 
         int qtdUsersInicial = (int) userRepository.count(); // Conta a quantidade de usuários antes de registrar um novo
         authService.register(user);
-        int qtdUsersFinal = (int) userRepository.count(); // Conta a quantidade de usuários depois de registrar um novo
+        int qtdUsersFinal = (int) userRepository.count(); // Conta a quantidade de usuários após registrar um novo
         assertEquals(qtdUsersInicial + 1, qtdUsersFinal); // Verifica se a quantidade de usuários aumentou em 1 com o registro do novo usuário
     }
 
@@ -78,9 +75,9 @@ class AuthServiceUnitTest  {
 
         UserEntity user2 = setarUsuario("jorge");
 
-        //Verifica se o assertThrows lançou a exceção esperada se sim a variavel thrown recebera essa execeção
-        EmailAlreadyExistsException thrown = assertThrows( EmailAlreadyExistsException.class, () -> authService.register(user2)); 
-        //Se a variavel thrown não for nula quer dizer que a exceção foi lançada como esperado
+        //Verifica se o assertThrows lançou a exceção esperada se sim a variável thrown recebera essa exceção
+        EmailAlreadyExistsException thrown = assertThrows( EmailAlreadyExistsException.class, () -> authService.register(user2));
+        //Se a variável thrown não for nula quer dizer que a exceção foi lançada como esperado
         assertNotNull(thrown); 
     }
 
@@ -103,7 +100,7 @@ class AuthServiceUnitTest  {
         assertNotNull(thrown);
     }
 
-    //---------------TESTES DO MÉTODO LOGIN----------------//
+    //---------------TESTES DO METODO LOGIN----------------//
     
      @Test
     void deveFazerLogin() {
@@ -117,7 +114,7 @@ class AuthServiceUnitTest  {
 
     @Test
     void ErroAoFazerLoginComEmailInexistente() {
-        //tenta login com um email que não existe
+        //tenta login com um e-mail que não existe
         EmailNotFoundException thrown = assertThrows( EmailNotFoundException.class, () -> authService.login("aaaaaa@gmail.com", "123456")); 
         assertNotNull(thrown);
     }
