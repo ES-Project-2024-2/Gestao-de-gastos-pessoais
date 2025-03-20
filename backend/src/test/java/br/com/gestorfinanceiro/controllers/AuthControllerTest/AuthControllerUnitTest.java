@@ -1,5 +1,6 @@
 package br.com.gestorfinanceiro.controllers.AuthControllerTest;
 
+import br.com.gestorfinanceiro.TestDataUtil;
 import br.com.gestorfinanceiro.controller.AuthController;
 import br.com.gestorfinanceiro.dto.LoginDTO;
 import br.com.gestorfinanceiro.dto.UserDTO;
@@ -54,12 +55,12 @@ class AuthControllerUnitTest {
     }
 
     @Test
-    void conferirServiceChamadoCorretamente(){        
-        UserDTO userDTO = setarUsuario("jorge");
+    void conferirServiceChamadoCorretamente(){
+        UserDTO userDTO = TestDataUtil.criarUsuarioDtoUtil("jorge");
         assertDoesNotThrow(() -> authController.register(userDTO)); //Primeira requisição o service não pode lançar exceção
 
 
-        UserDTO userDTO2 = setarUsuario("jorge2");
+        UserDTO userDTO2 = TestDataUtil.criarUsuarioDtoUtil("jorge2");
         userDTO2.setEmail("jorge@gmail.com");
 
         //Se o service for convocado corretamente, ele lançara uma exceção de e-mail já existente, pois o e-mail já foi cadastrado na requisição anterior
@@ -100,19 +101,9 @@ class AuthControllerUnitTest {
     //-------------------------------MÉTODOS AUXILIARES-------------------------------//
 
     public UserDTO adicionarUsuario(String nome) {
-        UserDTO userDTO = setarUsuario(nome);
+        UserDTO userDTO = TestDataUtil.criarUsuarioDtoUtil(nome);
 
         authController.register(userDTO); 
-
-        return userDTO;
-    }
-
-    public UserDTO setarUsuario(String nome) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(nome); 
-        userDTO.setEmail(nome+"@gmail.com");	
-        userDTO.setPassword("123456");
-        userDTO.setRole("USER");
 
         return userDTO;
     }
