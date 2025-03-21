@@ -13,17 +13,20 @@ import { Router } from '@angular/router';
         <div class="left-section">
           <h1 class="logo"><img src="assets/logo-horizontal.png"></h1>
         </div>
-        <div class="right-section">
-        <button class="logout" (click)="receitas()">Minhas receitas</button>
+        <div class="right-section" *ngIf="isAdmin()">
+          <button class="button" (click)="goAdmin()">Painel Admin</button>
         </div>
         <div class="right-section">
-       <!-- <button class="logout" (click)="despesas()">Minhas despesas</button>-->
-       <button class="logout despesas-btn" (click)="despesas()">Minhas despesas</button>
+          <button class="button" (click)="receitas()">Minhas receitas</button>
         </div>
         <div class="right-section">
-          <button class="logout" (click)="logout()">Sair</button>
+       <!-- <button class="button" (click)="despesas()">Minhas despesas</button>-->
+       <button class="button despesas-btn" (click)="despesas()">Minhas despesas</button>
         </div>
+        <div class="right-section">
+          <button class="button" (click)="logout()">Sair</button>
         </div>
+      </div>
 </nav>
 
   `,
@@ -36,6 +39,10 @@ export class HomeComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  isAdmin(): boolean {
+    return this.authService.hasRole('ADMIN');
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
@@ -47,5 +54,9 @@ export class HomeComponent {
 
   despesas(): void {
     this.router.navigate(['/home/expense']);
+  }
+
+  goAdmin(): void {
+    this.router.navigate(['/home/admin']);
   }
 }

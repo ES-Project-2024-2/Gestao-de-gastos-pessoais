@@ -7,6 +7,7 @@ import { authGuard } from "./auth/auth.guard";
 import { IncomeComponent } from "./home/income/income.component";
 import { RootComponent } from "./root/root.component";
 import { ExpenseComponent } from "./home/expense/expense.component";
+import { AdminComponent } from "./admin/admin.component";
 
 
 const routeConfig: Routes = [
@@ -28,10 +29,10 @@ const routeConfig: Routes = [
         title: 'Home' 
     },
     { 
-        path: 'home/admin', component: HomeComponent, 
+        path: 'home/admin', component: AdminComponent, 
         canActivate: [authGuard],
         data: {role: 'ADMIN'},
-        title: 'Teste filtro de role' 
+        title: 'Admin' 
     },
     {
         path: 'unauthorized', component: UnauthorizedComponent, title: 'Unauthorized'
