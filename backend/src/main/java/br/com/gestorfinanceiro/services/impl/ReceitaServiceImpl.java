@@ -63,10 +63,12 @@ public class ReceitaServiceImpl implements ReceitaService {
             throw new InvalidUserIdException();
         }
 
-        try {
-            return receitaRepository.findAllByUserUuid(userId);
-        } catch (Exception e) {
-            throw new ReceitaOperationException("Erro ao listar receitas. Por favor, tente novamente.", e);
+        List<ReceitaEntity> receitas = receitaRepository.findAllByUserUuid(userId);
+
+        if (receitas.isEmpty()) {
+            throw new ReceitaNotFoundException(userId);
+        } else {
+            return receitas;
         }
     }
 
@@ -92,16 +94,15 @@ public class ReceitaServiceImpl implements ReceitaService {
             throw new InvalidDataException("Os dados da receita não podem ser nulos.");
         }
 
-        try {
             ReceitaEntity receita = receitaRepository.findById(uuid)
                     .orElseThrow(() -> new ReceitaNotFoundException(uuid));
 
+        try {
             receita.setData(receitaAtualizada.getData());
             receita.setCategoria(receitaAtualizada.getCategoria());
             receita.setValor(receitaAtualizada.getValor());
             receita.setOrigemDoPagamento(receitaAtualizada.getOrigemDoPagamento());
             receita.setObservacoes(receitaAtualizada.getObservacoes());
-
 
             return receitaRepository.save(receita);
         } catch (Exception e) {
@@ -116,10 +117,10 @@ public class ReceitaServiceImpl implements ReceitaService {
             throw new InvalidUuidException();
         }
 
-        try {
             ReceitaEntity receita = receitaRepository.findById(uuid)
                     .orElseThrow(() -> new ReceitaNotFoundException(uuid));
 
+        try {
             receitaRepository.delete(receita);
         } catch (Exception e) {
             throw new ReceitaOperationException("Erro ao excluir receita. Por favor, tente novamente.", e);
