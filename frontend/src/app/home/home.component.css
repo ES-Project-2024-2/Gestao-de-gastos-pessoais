@@ -60,6 +60,30 @@ body {
   display: inline-block; 
 }
 
+.button-logout {
+  width: 100%;
+  background: none;
+  color: #ff4444;
+  border: none;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centraliza horizontalmente */
+  gap: 8px;
+}
+
+.button-logout:hover {
+  background-color: #fff1f1;
+}
+
+.button-logout i {
+  font-size: 16px;
+} 
+
 .logout:hover {
   background-color: #5EC57E;
   transform: scale(1.02);
@@ -69,6 +93,11 @@ body {
 .left-section {
   display: flex;
   align-items: center; /* Alinha a logo verticalmente */
+}
+
+.right-section {
+  display: flex;
+  align-items: right; 
 }
 
 .logo img {
@@ -84,4 +113,78 @@ body {
 
 .despesas-btn:hover {
   background-color: #cc0000 
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  i {
+    font-size: 16px;
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  min-width: 300px;
+  display: none;
+  z-index: 1000;
+  
+  &.show {
+    display: block;
+  }
+}
+
+.user-info {
+  padding: 16px;
+  
+  .user-name {
+    font-weight: bold;
+    color: #000000;
+    margin: 0;
+  }
+  
+  .user-email {
+    color: #000000;
+    margin: 4px 0 0;
+    font-size: 0.9em;
+  }
+}
+
+hr {
+  margin: 0;
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+.menu-item {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  
+  i {
+    font-size: 16px;
+  }
+
+  
 }

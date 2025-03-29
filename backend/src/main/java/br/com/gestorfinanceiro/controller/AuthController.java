@@ -43,9 +43,10 @@ public class AuthController {
 
         // Obtém a role do usuário autenticado
         String role = userEntity.getRole().name();
+        String estaAtivo = userEntity.getEstaAtivo().toString();
 
         // Gera o token JWT com username e role
-        String token = jwtUtil.generateToken(userEntity.getUuid(), userEntity.getUsername(),userEntity.getEmail(), role);
+        String token = jwtUtil.generateToken(userEntity.getUuid(), userEntity.getUsername(),userEntity.getEmail(), role, estaAtivo);
 
         return ResponseEntity.ok(Map.of("token", token));
     }

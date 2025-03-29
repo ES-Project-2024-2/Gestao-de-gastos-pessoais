@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
 
@@ -7,37 +7,27 @@ import { Router } from '@angular/router';
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule],
-  template: `
-<nav class="navbar">
-      <div class="nav-container">
-        <div class="left-section">
-          <h1 class="logo"><img src="assets/logo-horizontal.png"></h1>
-        </div>
-        <div class="right-section" *ngIf="isAdmin()">
-          <button class="button" (click)="goAdmin()">Painel Admin</button>
-        </div>
-        <div class="right-section">
-          <button class="button" (click)="receitas()">Minhas receitas</button>
-        </div>
-        <div class="right-section">
-       <!-- <button class="button" (click)="despesas()">Minhas despesas</button>-->
-       <button class="button despesas-btn" (click)="despesas()">Minhas despesas</button>
-        </div>
-        <div class="right-section">
-          <button class="button" (click)="logout()">Sair</button>
-        </div>
-      </div>
-</nav>
-
-  `,
+  templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
   
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   title = "home" 
+  isUserMenuOpen: boolean = false;
+  userName: string = ''; 
+  userEmail: string = ''
   
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  ngOnInit() {
+    this.updateUserInfo();
+  }
+
+  updateUserInfo() {
+    this.userName = this.getUserName();
+    this.userEmail = this.getEmail();
+  }
 
   isAdmin(): boolean {
     return this.authService.hasRole('ADMIN');
@@ -59,4 +49,35 @@ export class HomeComponent {
   goAdmin(): void {
     this.router.navigate(['/home/admin']);
   }
+
+  toggleUserMenu() {
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+    this.updateUserInfo();
+  }
+
+  getUserName(): string {
+    return this.authService.getUserName();
+  }
+
+  getEmail(): string {
+    return this.authService.getUserEmail();
+  }
+
+  async desativarConta(): Promise<void> {
+    const confirma = window.confirm('Tem certeza que deseja desativar sua conta? Esta ação só pode ser desfeita por um admin.');
+    if (confirma) {
+      try {
+        const sucesso = await this.authService.disableAccount(this.authService.getUserId());
+        if (sucesso) {
+          this.router.navigate(['/login']);
+        } else {
+          window.alert('Não foi possível desativar a conta. Tente novamente mais tarde.');
+        }
+      } catch (error) {
+        console.error('Erro ao desativar conta:', error);
+        window.alert('Erro ao desativar a conta. Tente novamente mais tarde.');
+      }
+    }
+  }
+
 }

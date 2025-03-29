@@ -8,7 +8,7 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
 
   const requiredRole: string | undefined = route.data?.['role'];
 
-  if (!authService.isAuthenticated()) {
+  if (!authService.isAuthenticated() || !authService.isActive()) {
     return router.createUrlTree(['/login']);
   }
 

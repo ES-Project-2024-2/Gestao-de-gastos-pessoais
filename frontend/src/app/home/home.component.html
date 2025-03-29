@@ -1,0 +1,31 @@
+<nav class="navbar">
+    <div class="nav-container">
+      <div class="left-section">
+        <h1 class="logo"><img src="assets/logo-horizontal.png"></h1>
+      </div>
+      <div class="right-section" *ngIf="isAdmin()">
+        <button class="button" (click)="goAdmin()">Painel Admin</button>
+      </div>
+      <div class="right-section">
+        <button class="button" (click)="receitas()">Minhas receitas</button>
+      </div>
+      <div class="right-section">
+        <button class="button despesas-btn" (click)="despesas()">Minhas despesas</button>
+      </div>
+      <div class="right-section">
+        <div class="user-menu">
+          <button class="button user-button" (click)="toggleUserMenu()">Options</button>
+          <div class="dropdown-menu" [class.show]="isUserMenuOpen">
+            <div class="user-info">
+              <p class="user-name">Usuário: {{ userName }}</p>
+              <p class="user-email">Email: {{ userEmail }}</p>
+            </div>
+            <hr>
+            <button class="button-logout" (click)="desativarConta()">Desativar a conta</button>
+            <hr>
+            <button class="button-logout" (click)="logout()">Sair</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</nav>
