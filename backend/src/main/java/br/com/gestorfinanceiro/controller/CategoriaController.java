@@ -4,23 +4,16 @@ import br.com.gestorfinanceiro.config.security.JwtUtil;
 import br.com.gestorfinanceiro.dto.categoria.CategoriaCreateDTO;
 import br.com.gestorfinanceiro.dto.categoria.CategoriaDTO;
 import br.com.gestorfinanceiro.dto.categoria.CategoriaUpdateDTO;
-import br.com.gestorfinanceiro.exceptions.categoria.CategoriaAcessDeniedException;
-import br.com.gestorfinanceiro.exceptions.categoria.CategoriaAlreadyExistsException;
-import br.com.gestorfinanceiro.exceptions.categoria.CategoriaIdNotFoundException;
-import br.com.gestorfinanceiro.exceptions.categoria.CategoriaOperationException;
 import br.com.gestorfinanceiro.mappers.Mapper;
 import br.com.gestorfinanceiro.models.CategoriaEntity;
 import br.com.gestorfinanceiro.services.CategoriaService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -39,34 +32,22 @@ public class CategoriaController {
         this.jwtUtil = jwtUtil;
     }
 
-    
-        @PostMapping
-        public ResponseEntity<?> criarCategoria(@Valid @RequestBody CategoriaCreateDTO categoriaCreateDTO, 
-                                        HttpServletRequest request) {
-        try {
-                String authHeader = request.getHeader(AUTHORIZATION_HEADER);
-                if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-                }
+    @PostMapping
+    public ResponseEntity<CategoriaDTO> criarCategoria(@Valid @RequestBody CategoriaCreateDTO categoriaCreateDTO, HttpServletRequest request) {
+        String token = request.getHeader(AUTHORIZATION_HEADER)
+                .replace(BEARER_PREFIX, "");
+        String userId = jwtUtil.extractUserId(token);
 
-                String token = authHeader.replace(BEARER_PREFIX, "");
-                String userId = jwtUtil.extractUserId(token);
+        CategoriaEntity novaCategoria = categoriaService.criarCategoria(categoriaCreateDTO, userId);
 
-                CategoriaEntity novaCategoria = categoriaService.criarCategoria(categoriaCreateDTO, userId);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(novaCategoria.getUuid())
+                .toUri();
 
-                URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                        .path("/{id}")
-                        .buildAndExpand(novaCategoria.getUuid())
-                        .toUri();
-
-                return ResponseEntity.created(location)
-                        .body(categoriaMapper.mapTo(novaCategoria));
-                        
-        } catch (CategoriaAlreadyExistsException ex) {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(new ErrorResponse(ex.getMessage()));
-        }
-        }
+        return ResponseEntity.created(location)
+                .body(categoriaMapper.mapTo(novaCategoria));
+    }
 
     @GetMapping
     public ResponseEntity<List<CategoriaDTO>> listarCategorias(HttpServletRequest request) {
@@ -108,59 +89,26 @@ public class CategoriaController {
     }
 
     @PatchMapping("/{categoriaId}")
-    public ResponseEntity<?> atualizarCategoria(
-            @PathVariable String categoriaId,
-            @Valid @RequestBody CategoriaUpdateDTO categoriaUpdateDTO,
-            HttpServletRequest request) {
-        
-        try {
-            String token = request.getHeader(AUTHORIZATION_HEADER)
-                    .replace(BEARER_PREFIX, "");
-            String userId = jwtUtil.extractUserId(token);
-    
-            CategoriaEntity categoriaAtualizada = categoriaService.atualizarCategoria(
-                    categoriaId, categoriaUpdateDTO, userId);
-    
-            return ResponseEntity.ok(categoriaMapper.mapTo(categoriaAtualizada));
-            
-        } catch (CategoriaIdNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse(ex.getMessage()));
-        } catch (CategoriaAcessDeniedException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorResponse(ex.getMessage()));
-        }
+    public ResponseEntity<CategoriaDTO> atualizarCategoria(@PathVariable String categoriaId, @Valid @RequestBody CategoriaUpdateDTO categoriaUpdateDTO, HttpServletRequest request) {
+        String token = request.getHeader(AUTHORIZATION_HEADER)
+                .replace(BEARER_PREFIX, "");
+        String userId = jwtUtil.extractUserId(token);
+
+        CategoriaEntity categoriaAtualizada = categoriaService.atualizarCategoria(categoriaId, categoriaUpdateDTO,
+                userId);
+
+        return ResponseEntity.ok(categoriaMapper.mapTo(categoriaAtualizada));
     }
 
-        @DeleteMapping("/{categoriaId}")
-        public ResponseEntity<?> deletarCategoria(@PathVariable String categoriaId, 
-                                                HttpServletRequest request) {
-        try {
-                String token = request.getHeader(AUTHORIZATION_HEADER)
-                        .replace(BEARER_PREFIX, "");
-                String userId = jwtUtil.extractUserId(token);
-                
-                categoriaService.excluirCategoria(categoriaId, userId);
-                return ResponseEntity.noContent().build();
-                
-        } catch (CategoriaIdNotFoundException ex) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(ex.getMessage()));
-        } catch (CategoriaAcessDeniedException ex) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(new ErrorResponse(ex.getMessage()));
-        } catch (CategoriaOperationException ex) {
-                return ResponseEntity.badRequest()
-                .body(new ErrorResponse(ex.getMessage()));
-        } catch (Exception ex) {
-                return ResponseEntity.internalServerError()
-                .body(new ErrorResponse("Erro ao excluir categoria"));
-        }
-        }
+    @DeleteMapping("/{categoriaId}")
+    public ResponseEntity<Void> deletarCategoria(@PathVariable String categoriaId, HttpServletRequest request) {
+        String token = request.getHeader(AUTHORIZATION_HEADER)
+                .replace(BEARER_PREFIX, "");
+        String userId = jwtUtil.extractUserId(token);
 
-    public record ErrorResponse(String message, Instant timestamp) {
-    public ErrorResponse(String message) {
-        this(message, Instant.now());
-        }
+        categoriaService.excluirCategoria(categoriaId, userId);
+
+        return ResponseEntity.noContent()
+                .build();
     }
 }
