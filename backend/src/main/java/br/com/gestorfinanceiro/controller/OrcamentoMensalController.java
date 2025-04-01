@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -110,4 +112,8 @@ public class OrcamentoMensalController {
             @NotNull @Positive BigDecimal valorLimite,
             @NotNull YearMonth periodo
     ) {}
+        @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Void> handleAccessDeniedException(AccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
 }
