@@ -9,6 +9,8 @@ import br.com.gestorfinanceiro.models.DespesaEntity;
 import br.com.gestorfinanceiro.models.ReceitaEntity;
 import br.com.gestorfinanceiro.services.DashboardService;
 import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,20 +57,39 @@ public class DashboardController {
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("/maior-despesa")
     public ResponseEntity<DespesaDTO> getMaiorDespesa(@RequestParam YearMonth periodo,
-                                                      HttpServletRequest request) {
-        String userId = getUserIdFromToken(request);
-        DespesaEntity despesa = dashboardService.getMaiorDespesa(userId, periodo);
-        return ResponseEntity.ok(despesaMapper.mapTo(despesa));
+                                                    HttpServletRequest request) {
+        try {
+            String userId = getUserIdFromToken(request);
+            DespesaEntity despesa = dashboardService.getMaiorDespesa(userId, periodo);
+            
+            if (despesa == null) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            return ResponseEntity.ok(despesaMapper.mapTo(despesa));
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/maior-receita")
     public ResponseEntity<ReceitaDTO> getMaiorReceita(@RequestParam YearMonth periodo,
                                                       HttpServletRequest request) {
-        String userId = getUserIdFromToken(request);
-        ReceitaEntity receita = dashboardService.getMaiorReceita(userId, periodo);
-        return ResponseEntity.ok(receitaMapper.mapTo(receita));
+        try {
+            String userId = getUserIdFromToken(request);
+            ReceitaEntity receita = dashboardService.getMaiorReceita(userId, periodo);
+            
+            if (receita == null) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            return ResponseEntity.ok(receitaMapper.mapTo(receita));
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/categoria-maior-despesa")
