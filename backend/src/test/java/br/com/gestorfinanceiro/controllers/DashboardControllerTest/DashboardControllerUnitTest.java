@@ -1,24 +1,14 @@
 package br.com.gestorfinanceiro.controllers.DashboardControllerTest;
 import br.com.gestorfinanceiro.dto.despesa.DespesaDTO;
-import br.com.gestorfinanceiro.dto.orcamentomensal.OrcamentoMensalDTO;
 import br.com.gestorfinanceiro.dto.receita.ReceitaDTO;
 import br.com.gestorfinanceiro.controller.DashboardController;
-import br.com.gestorfinanceiro.controller.OrcamentoMensalController;
-import br.com.gestorfinanceiro.controller.OrcamentoMensalController.OrcamentoMensalRequest;
-import br.com.gestorfinanceiro.models.CategoriaEntity;
 import br.com.gestorfinanceiro.models.DespesaEntity;
-import br.com.gestorfinanceiro.models.OrcamentoMensalEntity;
 import br.com.gestorfinanceiro.models.ReceitaEntity;
 import br.com.gestorfinanceiro.models.UserEntity;
-import br.com.gestorfinanceiro.models.enums.CategoriaType;
 import br.com.gestorfinanceiro.services.DashboardService;
-import br.com.gestorfinanceiro.services.OrcamentoMensalService;
-import io.jsonwebtoken.JwtException;
 import br.com.gestorfinanceiro.config.security.JwtUtil;
 import br.com.gestorfinanceiro.mappers.Mapper;
 
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -38,17 +28,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.UUID;
-import java.util.List;
+
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(MockitoExtension.class)

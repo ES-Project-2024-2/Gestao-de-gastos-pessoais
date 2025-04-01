@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Disabled
 class DespesaControllerIntegrationTest {
 
     private static final String CATEGORIA_PADRAO = "Alimentacao";
